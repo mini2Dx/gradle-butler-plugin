@@ -9,3 +9,8 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+/bin/
+
+.project
+.classpath
+.settings/
