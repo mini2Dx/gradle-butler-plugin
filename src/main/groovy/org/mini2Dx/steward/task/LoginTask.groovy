@@ -18,6 +18,20 @@ class LoginTask extends DefaultTask {
 	
 	@TaskAction
 	def login() {
-		StewardUtils.execButler(project, "login");
+		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+			if(StewardUtils.is64Bit()) {
+				downloadAction.src(project.getExtensions().findByName('steward').windows64Download)
+			} else {
+				downloadAction.src(project.getExtensions().findByName('steward').windows32Download)
+			}
+		} else if (Os.isFamily(Os.FAMILY_MAC)) {
+			downloadAction.src(project.getExtensions().findByName('steward').osxDownload)
+		} else if (Os.isFamily(Os.FAMILY_UNIX)) {
+			if(StewardUtils.is64Bit()) {
+				downloadAction.src(project.getExtensions().findByName('steward').linux64Download)
+			} else {
+				downloadAction.src(project.getExtensions().findByName('steward').linux32Download)
+			}
+		}
 	}
 }

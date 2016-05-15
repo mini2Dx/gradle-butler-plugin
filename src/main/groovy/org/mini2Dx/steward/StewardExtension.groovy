@@ -7,7 +7,12 @@ package org.mini2Dx.steward
  *
  */
 class StewardExtension {
+	String user;
+	String game;
+	
 	boolean updateButler = true;
+	boolean alphaChannel = false;
+	boolean betaChannel = false;
 	String userVersion;
 	String butlerInstallDirectory;
 	

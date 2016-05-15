@@ -57,7 +57,9 @@ class UpdateButlerTask extends DefaultTask {
 	}
 	
 	def update(File binaryFile) {
-		StewardUtils.execButler(project, "upgrade");
+		if(project.getExtensions().findByName('steward').updateButler) {
+			StewardUtils.execButler(project, "upgrade");
+		}
 		StewardUtils.execButler(project, "-V");
 	}
 	
