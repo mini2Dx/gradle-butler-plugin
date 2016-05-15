@@ -1,5 +1,25 @@
 /**
- * Copyright 2016 Thomas Cashman
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2016 Thomas Cashman
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package org.mini2Dx.steward.task
 
@@ -8,7 +28,7 @@ import org.gradle.api.tasks.TaskAction
 import org.mini2Dx.steward.StewardUtils
 
 /**
- *
+ * Calls 'butler login'
  */
 class LoginTask extends DefaultTask {
 	LoginTask() {
@@ -18,20 +38,6 @@ class LoginTask extends DefaultTask {
 	
 	@TaskAction
 	def login() {
-		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-			if(StewardUtils.is64Bit()) {
-				downloadAction.src(project.getExtensions().findByName('steward').windows64Download)
-			} else {
-				downloadAction.src(project.getExtensions().findByName('steward').windows32Download)
-			}
-		} else if (Os.isFamily(Os.FAMILY_MAC)) {
-			downloadAction.src(project.getExtensions().findByName('steward').osxDownload)
-		} else if (Os.isFamily(Os.FAMILY_UNIX)) {
-			if(StewardUtils.is64Bit()) {
-				downloadAction.src(project.getExtensions().findByName('steward').linux64Download)
-			} else {
-				downloadAction.src(project.getExtensions().findByName('steward').linux32Download)
-			}
-		}
+		StewardUtils.execButler(project, "login");
 	}
 }
