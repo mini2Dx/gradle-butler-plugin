@@ -48,7 +48,7 @@ project(":projectName") {
 The plugin will add the following tasks to your project.
 
 | Task  | Description |
-| ------------- | ------------- |
+| ------------- | ------------- | 
 | butlerUpdate  | Updates butler to latest stable version or installs it if it is not present. All other tasks depend on this task so you do not need to call it explicitly. |
 | butlerLogin  | Calls ```butler login``` |
 | butlerLogout  | Calls ```butler logout``` |
@@ -61,7 +61,7 @@ The [channel](https://docs.itch.ovh/butler/master/pushing.html#channel-names) is
 There are several optional configuration parameters available.
 
 | Option  | Type | Default | Description |
-| ------------- | ------------- |
+| ------------- | ------------- | ------------- | ------------- |
 | user  | String | _blank_ | Your itch.io username |
 | game  | String | _blank_ | The itch.io game id |
 | updateButler  | boolean | true | Set to false to disable butler updates |
