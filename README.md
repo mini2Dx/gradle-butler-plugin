@@ -62,15 +62,18 @@ There are several optional configuration parameters available.
 
 | Option  | Type | Default | Description |
 | ------------- | ------------- | ------------- | ------------- |
-| user  | String | _blank_ | Your itch.io username |
-| game  | String | _blank_ | The itch.io game id |
+| user  | String | _blank_ | (**required**) Your itch.io username |
+| game  | String | _blank_ | (**required**) The itch.io game id |
 | updateButler  | boolean | true | Set to false to disable butler updates |
 | alphaChannel  | boolean | false | When true appends -alpha to the channel name |
 | betaChannel  | boolean | false |  When true appends -beta to channel name |
-| userVersion  | String | _blank_ | Set this if you want to override itch.io's version number |
-| windows.butlerInstallDirectory  | String | _blank_ | Set if you want to override the automatic Butler install directory on Windows |
-| osx.butlerInstallDirectory  | String | _blank_ | Set if you want to override the automatic Butler install directory on OS X |
-| linux.butlerInstallDirectory  | String | _blank_ | Set if you want to override the automatic Butler install directory on Linux |
+| userVersion  | String | null | Set this if you want to override itch.io's version number |
+| windows.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on Windows |
+| windows.binDirectory  | String | _blank_ | (**required**) The directory of your game's Windows build |
+| osx.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on OS X |
+| osx.binDirectory  | String | _blank_ | (**required**) The directory of your game's OS X build |
+| linux.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on Linux |
+| linux.binDirectory  | String | _blank_ | (**required**) The directory of your game's Linux build |
 
 The following example shows all options in use.
 
