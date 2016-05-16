@@ -1,5 +1,5 @@
 # gradle-butler-plugin
-A gradle plugin for the [itch.io butler command line tool](https://docs.itch.ovh/butler/master/)
+A gradle plugin for automatically installing, updating and running the [itch.io butler command line tool](https://docs.itch.ovh/butler/master/) as part of your build.
 
 
 ## How to use
