@@ -12,7 +12,7 @@ buildscript {
         mavenLocal()
         jcenter()
         mavenCentral()
-        maven { url "https://mini2dx.org/maven/content/repositories/thirdparty" }
+        maven { url "https://mini2dx.org/maven/content/repositories/releases" }
     }
     dependencies {
         classpath group: 'org.mini2Dx', name: 'butler', version: '1.0.0'
