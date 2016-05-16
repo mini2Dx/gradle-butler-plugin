@@ -21,38 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward
-
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.mini2Dx.steward.domain.Linux
-import org.mini2Dx.steward.domain.OSX
-import org.mini2Dx.steward.domain.Windows
-import org.mini2Dx.steward.task.LoginTask
-import org.mini2Dx.steward.task.LogoutTask
-import org.mini2Dx.steward.task.PushTask
-import org.mini2Dx.steward.task.UpdateButlerTask
-
-import de.undercouch.gradle.tasks.download.DownloadTaskPlugin
+package org.mini2Dx.butler.domain
 
 /**
- * Applies the plugin extension and tasks
+ * OS X-specific configuration
  */
-class StewardPlugin implements Plugin<Project> {
-
-	@Override
-	public void apply(Project project) {
-		project.plugins.apply DownloadTaskPlugin
-		project.extensions.create("steward", StewardExtension)
-		
-		project.steward.extensions.create("windows", Windows)
-		project.steward.extensions.create("osx", OSX)
-		project.steward.extensions.create("linux", Linux)
-		
-		project.task('butlerUpdate', type: UpdateButlerTask)
-		project.task('butlerLogin', type: LoginTask)
-		project.task('butlerLogout', type: LogoutTask)
-		project.task('butlerPush', type: PushTask)
-	}
-
+class OSX {
+	/**
+	 * The directory containing the game's binaries
+	 */
+	String binDirectory;
+	/**
+	 * Set if you want to override the automatic Butler install directory
+	 */
+	String butlerInstallDirectory;
 }

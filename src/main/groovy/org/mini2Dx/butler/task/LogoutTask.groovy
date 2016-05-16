@@ -21,14 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward.exception
+package org.mini2Dx.butler.task
+
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
+import org.mini2Dx.butler.ButlerUtils
 
 /**
- * Thrown when the build does not exist for uploading
+ * Calls 'butler logout'
  */
-class NoBuildException extends Exception {
+class LogoutTask extends DefaultTask  {
+	LogoutTask() {
+		super()
+		dependsOn("butlerUpdate")
+	}
 
-	public NoBuildException() {
-		super("Build does not exist for uploading. Ensure butlerPush.dependsOn is set in your build.gradle")
+	@TaskAction
+	def logout() {
+		ButlerUtils.execButler(project, "logout");
 	}
 }

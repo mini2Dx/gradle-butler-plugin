@@ -21,24 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward
+package org.mini2Dx.butler
 
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Project
-import org.gradle.process.internal.ExecAction
-import org.mini2Dx.steward.exception.NoButlerDirectoryException
+import org.mini2Dx.butler.exception.NoButlerDirectoryException
 
 /**
  * Static utility methods for tasks
  */
-class StewardUtils {
+class ButlerUtils {
 	/**
 	 * Returns the Butler install directory
 	 * @param project The {@link Project} being built
 	 * @return A {@link File} for the install directory
 	 */
 	public static File getInstallDirectory(Project project) {
-		String installPath = project.getExtensions().findByName('steward').butlerInstallDirectory
+		String installPath = ""
+		
+		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+			installPath = project.getExtensions().findByName('butler').windows.butlerInstallDirectory
+		} else if (Os.isFamily(Os.FAMILY_MAC)) {
+			installPath = project.getExtensions().findByName('butler').osx.butlerInstallDirectory
+		} else {
+			installPath = project.getExtensions().findByName('butler').linux.butlerInstallDirectory
+		}
 		
 		File installDirectory;
 		if(installPath == null) {

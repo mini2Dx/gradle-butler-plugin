@@ -21,11 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward.domain
+package org.mini2Dx.butler.exception
 
 /**
- * Linux-specific configuration
+ * Thrown when the build does not exist for uploading
  */
-class Linux {
-	String binDirectory
+class NoBuildException extends Exception {
+
+	public NoBuildException() {
+		super("Build does not exist for uploading. Ensure butlerPush.dependsOn is set in your build.gradle")
+	}
 }

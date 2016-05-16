@@ -21,23 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward.task
-
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
-import org.mini2Dx.steward.StewardUtils
+package org.mini2Dx.butler.domain
 
 /**
- * Calls 'butler logout'
+ * Windows-specific configuration
  */
-class LogoutTask extends DefaultTask  {
-	LogoutTask() {
-		super()
-		dependsOn("butlerUpdate")
-	}
-
-	@TaskAction
-	def logout() {
-		StewardUtils.execButler(project, "logout");
-	}
+class Windows {
+	/**
+	 * The directory containing the game's binaries
+	 */
+	String binDirectory;
+	/**
+	 * Set if you want to override the automatic Butler install directory
+	 */
+	String butlerInstallDirectory;
 }

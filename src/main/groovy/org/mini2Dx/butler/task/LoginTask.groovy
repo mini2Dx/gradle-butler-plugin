@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward.task
+package org.mini2Dx.butler.task
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.mini2Dx.steward.StewardUtils
+import org.mini2Dx.butler.ButlerUtils
 
 /**
  * Calls 'butler login'
@@ -38,6 +38,6 @@ class LoginTask extends DefaultTask {
 	
 	@TaskAction
 	def login() {
-		StewardUtils.execButler(project, "login");
+		ButlerUtils.execButler(project, "login");
 	}
 }

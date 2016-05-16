@@ -21,11 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward.domain
+package org.mini2Dx.butler.exception
 
 /**
- * OS X-specific configuration
+ * Thrown when the Butler install directory could not be determined
  */
-class OSX {
-	String binDirectory
+class NoButlerDirectoryException extends Exception {
+
+	public NoButlerDirectoryException() {
+		super("Could not determine directory for installing itch.io Butler application. Try setting butlerInstallDirectory");
+	}
 }

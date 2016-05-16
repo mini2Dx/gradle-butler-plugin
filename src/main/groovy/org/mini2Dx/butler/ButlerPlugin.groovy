@@ -21,14 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward.exception
+package org.mini2Dx.butler
+
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.mini2Dx.butler.domain.Linux
+import org.mini2Dx.butler.domain.OSX
+import org.mini2Dx.butler.domain.Windows
+import org.mini2Dx.butler.task.LoginTask
+import org.mini2Dx.butler.task.LogoutTask
+import org.mini2Dx.butler.task.PushTask
+import org.mini2Dx.butler.task.UpdateButlerTask
+
+import de.undercouch.gradle.tasks.download.DownloadTaskPlugin
 
 /**
- * Thrown when the Butler install directory could not be determined
+ * Applies the plugin extension and tasks
  */
-class NoButlerDirectoryException extends Exception {
+class ButlerPlugin implements Plugin<Project> {
 
-	public NoButlerDirectoryException() {
-		super("Could not determine directory for installing itch.io Butler application. Try setting butlerInstallDirectory");
+	@Override
+	public void apply(Project project) {
+		project.plugins.apply DownloadTaskPlugin
+		project.extensions.create("butler", StewardExtension)
+		
+		project.butler.extensions.create("windows", Windows)
+		project.butler.extensions.create("osx", OSX)
+		project.butler.extensions.create("linux", Linux)
+		
+		project.task('butlerUpdate', type: UpdateButlerTask)
+		project.task('butlerLogin', type: LoginTask)
+		project.task('butlerLogout', type: LogoutTask)
+		project.task('butlerPush', type: PushTask)
 	}
+
 }

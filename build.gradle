@@ -21,6 +21,7 @@ dependencies {
 	compile 'de.undercouch:gradle-download-task:3.0.0'
 
 	testCompile 'junit:junit:4.11'
+	testCompile gradleTestKit()
 }
 
 task sourceJar(type: Jar) {

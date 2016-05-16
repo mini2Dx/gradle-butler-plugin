@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.mini2Dx.steward.task
+package org.mini2Dx.butler.task
 
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.mini2Dx.steward.StewardUtils
-import org.mini2Dx.steward.exception.NoBuildException
+import org.mini2Dx.butler.ButlerUtils
+import org.mini2Dx.butler.exception.NoBuildException
 
 /**
  * Calls 'butler push'. Will push the game binary corresponding to the OS the task runs on.
@@ -44,22 +44,22 @@ class PushTask extends DefaultTask  {
 		String channel;
 
 		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-			osBinDir = project.getExtensions().findByName('steward').windows.binDirectory
+			osBinDir = project.getExtensions().findByName('butler').windows.binDirectory
 			channel = "windows"
 		} else if (Os.isFamily(Os.FAMILY_MAC)) {
-			osBinDir = project.getExtensions().findByName('steward').osx.binDirectory
+			osBinDir = project.getExtensions().findByName('butler').osx.binDirectory
 			channel = "osx"
 		} else {
-			osBinDir = project.getExtensions().findByName('steward').linux.binDirectory
+			osBinDir = project.getExtensions().findByName('butler').linux.binDirectory
 			channel = "linux"
 		}
 		if(osBinDir == null) {
 			throw new Exception("No steward binary directory set for " + channel)
 		}
 		
-		if(project.getExtensions().findByName('steward').alphaChannel) {
+		if(project.getExtensions().findByName('butler').alphaChannel) {
 			channel += "-alpha"
-		} else if(project.getExtensions().findByName('steward').betaChannel) {
+		} else if(project.getExtensions().findByName('butler').betaChannel) {
 			channel += "-beta"
 		}
 
@@ -67,22 +67,22 @@ class PushTask extends DefaultTask  {
 		if(!binDirectory.exists()) {
 			throw new NoBuildException()
 		}
-		String user = project.getExtensions().findByName('steward').user
+		String user = project.getExtensions().findByName('butler').user
 		if(user == null) {
 			throw new Exception("user not set in steward configuration")
 		}
-		String game = project.getExtensions().findByName('steward').game
+		String game = project.getExtensions().findByName('butler').game
 		if(game == null) {
 			throw new Exception("game not set in steward configuration")
 		}
 		String deployDetails = user + "/" + game + ":" + channel;
 
-		if(project.getExtensions().findByName('steward').userVersion != null) {
-			println "Deploying to itch.io [" + deployDetails + "] with version " + project.getExtensions().findByName('steward').userVersion
-			StewardUtils.execButler(project, binDirectory.getAbsolutePath(), deployDetails, "--userversion", project.getExtensions().findByName('steward').userVersion);
+		if(project.getExtensions().findByName('butler').userVersion != null) {
+			println "Deploying to itch.io [" + deployDetails + "] with version " + project.getExtensions().findByName('butler').userVersion
+			ButlerUtils.execButler(project, binDirectory.getAbsolutePath(), deployDetails, "--userversion", project.getExtensions().findByName('butler').userVersion);
 		} else {
 			println "Deploying to itch.io [" + deployDetails + "]"
-			StewardUtils.execButler(project, binDirectory.getAbsolutePath(), deployDetails);
+			ButlerUtils.execButler(project, binDirectory.getAbsolutePath(), deployDetails);
 		}
 	}
 }
