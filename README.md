@@ -1,4 +1,6 @@
 # gradle-butler-plugin
+[![Build Status](https://travis-ci.org/mini2Dx/gradle-butler-plugin.svg?branch=master)](https://travis-ci.org/mini2Dx/gradle-butler-plugin)
+
 A gradle plugin for automatically installing, updating and running the [itch.io butler command line tool](https://docs.itch.ovh/butler/master/) as part of your build.
 
 
