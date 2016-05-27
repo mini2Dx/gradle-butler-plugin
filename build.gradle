@@ -1,3 +1,35 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
+	}
+}
+
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+if(project.hasProperty('ossrhUser') && project.hasProperty("release")) {
+	apply plugin: "io.codearte.nexus-staging"
+
+	nexusStaging {
+		username = ossrhUser
+		password = ossrhPassword
+	}
+}
+
+group = 'org.mini2Dx'
+version = '1.0.1-SNAPSHOT'
+description = 'Gradle plugin for the itch.io butler command line tool'
+
 repositories {
 	mavenLocal()
 	mavenCentral()
@@ -5,15 +37,22 @@ repositories {
 	maven { url "https://mini2dx.org/maven/content/repositories/thirdparty" }
 }
 
-apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
-
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-group = 'org.mini2Dx'
-version = '1.0.1-SNAPSHOT'
+task javadocJar(type: Jar) {
+	classifier = 'javadoc'
+	from javadoc
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives javadocJar, sourcesJar
+}
 
 dependencies {
 	compile gradleApi()
@@ -24,28 +63,49 @@ dependencies {
 	testCompile gradleTestKit()
 }
 
-task sourceJar(type: Jar) {
-	from sourceSets.main.allJava
-}
-
-publishing {
-	repositories {
-		maven {
-			url "https://mini2dx.org/maven/content/repositories/releases"
-			if(project.hasProperty('mini2DxMavenUser')) {
-				credentials {
-					username = project.property('mini2DxMavenUser')
-					password = project.property('mini2DxMavenPassword')
-				}
-			}
-		}
+// Maven Central publication
+if(project.hasProperty('ossrhUser')) {
+	signing {
+		sign configurations.archives
 	}
-	publications {
-		maven(MavenPublication) {
-			from components.java
-			
-			artifact sourceJar {
-				classifier "sources"
+	
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				// POM signature
+				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+				// Target repository
+				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+					authentication(userName: ossrhUser, password: ossrhPassword)
+				}
+				pom.project {
+					name project.name
+					description project.description
+					packaging 'jar'
+					url 'https://github.com/mini2Dx/gradle-butler-plugin'
+
+					scm {
+						connection 'scm:git:https://github.com/mini2Dx/gradle-butler-plugin.git'
+						developerConnection 'scm:git:git@github.com:mini2Dx/gradle-butler-plugin.git'
+						url 'https://github.com/mini2Dx/gradle-butler-plugin.git'
+					}
+
+					licenses {
+						license {
+							name 'Apache License Version 2.0'
+							url 'https://opensource.org/licenses/Apache-2.0'
+							distribution 'repo'
+						}
+					}
+
+					developers {
+						developer {
+							id = 'tomcashman'
+							name = 'Thomas Cashman'
+							email = 'thomascashman404@gmail.com'
+						}
+					}
+				}
 			}
 		}
 	}
