@@ -92,8 +92,8 @@ if(project.hasProperty('ossrhUser')) {
 
 					licenses {
 						license {
-							name 'Apache License Version 2.0'
-							url 'https://opensource.org/licenses/Apache-2.0'
+							name 'The MIT License (MIT)'
+							url 'https://opensource.org/licenses/MIT'
 							distribution 'repo'
 						}
 					}
