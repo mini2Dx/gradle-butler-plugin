@@ -1,2 +1,6 @@
+[1.0.1]
+- Fixed gradle extension exception
+- Plugin now available in Maven Central
+
 [1.0.0]
 - Initial release
