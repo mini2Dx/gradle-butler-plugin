@@ -27,7 +27,7 @@ if(project.hasProperty('ossrhUser') && project.hasProperty("release")) {
 }
 
 group = 'org.mini2Dx'
-version = '1.0.1-SNAPSHOT'
+version = '1.0.1'
 description = 'Gradle plugin for the itch.io butler command line tool'
 
 repositories {
