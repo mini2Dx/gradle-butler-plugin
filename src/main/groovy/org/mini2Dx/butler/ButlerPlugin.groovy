@@ -43,7 +43,7 @@ class ButlerPlugin implements Plugin<Project> {
 	@Override
 	public void apply(Project project) {
 		project.plugins.apply DownloadTaskPlugin
-		project.extensions.create("butler", StewardExtension)
+		project.extensions.create("butler", ButlerExtension)
 		
 		project.butler.extensions.create("windows", Windows)
 		project.butler.extensions.create("osx", OSX)
