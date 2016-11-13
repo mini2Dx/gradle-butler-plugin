@@ -24,19 +24,15 @@
 package org.mini2Dx.butler.domain
 
 /**
- * OS X-specific configuration
+ * Cross-platform build configuration
  */
-class OSX {
+class AnyOs {
 	/**
 	 * The directory containing the game's binaries
 	 */
 	String binDirectory;
 	/**
-	 * Set if you want to override the automatic Butler install directory
+	 * Set if you want to override the channel. Defaults to 'release'
 	 */
-	String butlerInstallDirectory;
-	/**
-	 * Set if you want to override the channel. Defaults to 'osx'
-	 */
-	String channel = 'osx';
+	String channel = 'release';
 }

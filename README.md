@@ -42,6 +42,10 @@ project(":projectName") {
       linux {
          binDirectory = "/path/to/game/bin/directory"
       }
+      //Use this if your build will work on any OS, e.g. HTML5 games
+      anyOs {
+      	 binDirectory = "C:\\path\to\game\bin\directory"
+      }
    }
 }
 ```
@@ -53,9 +57,13 @@ The plugin will add the following tasks to your project.
 | butlerUpdate  | Updates butler to latest stable version or installs it if it is not present. All other tasks depend on this task so you do not need to call it explicitly. |
 | butlerLogin  | Calls ```butler login``` |
 | butlerLogout  | Calls ```butler logout``` |
-| butlerPush  | [Pushes the build](https://docs.itch.ovh/butler/master/pushing.html) using butler |
+| butlerPush  | [Pushes builds](https://docs.itch.ovh/butler/master/pushing.html) using butler |
 
-The [channel](https://docs.itch.ovh/butler/master/pushing.html#channel-names) is chosen based on the current OS. To push a release of your game for a platform you must run the task on that platform, i.e. You must be on Mac OS X to push a Mac game release.
+The butlerPush task supports pushing platform-specific and cross-platform builds simultaneously.
+
+For platform-specific builds, the [channel](https://docs.itch.ovh/butler/master/pushing.html#channel-names) is chosen based on the current OS. This can be overridden in the platform configuration. However, to push a release of your game for a platform you must run the task on that platform, i.e. You must be on Mac OS X to push a Mac game release.
+
+For cross-platform builds (e.g. HTML5 games), the ```anyOs``` configuration can be used to specify the channel.
 
 ## Advanced Configuration
 
@@ -71,10 +79,15 @@ There are several optional configuration parameters available.
 | userVersion  | String | null | Set this if you want to override itch.io's version number |
 | windows.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on Windows |
 | windows.binDirectory  | String | _blank_ | (**required**) The directory of your game's Windows build |
+| windows.channel  | String | "windows" | The channel to release the Windows build to |
 | osx.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on OS X |
 | osx.binDirectory  | String | _blank_ | (**required**) The directory of your game's OS X build |
+| osx.channel  | String | "osx" | The channel to release the OS X build to |
 | linux.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on Linux |
 | linux.binDirectory  | String | _blank_ | (**required**) The directory of your game's Linux build |
+| linux.channel  | String | "linux" | The channel to release the Linux build to |
+| anyOs.binDirectory  | String | _blank_ | (**required**) The directory of your game's Linux build |
+| anyOs.channel  | String | "release" | The channel to release your cross-platform build to |
 
 The following example shows all options in use.
 
@@ -91,18 +104,32 @@ project(":projectName") {
       alphaChannel = false
       betaChannel = false
       userVersion = project.version
-   
+
+      //Windows-specific builds  
+      //butlerInstallDirectory can be specified for anyOS builds performed on Windows 
       windows {
       	 butlerInstallDirectory = "C:\\path\to\butler\directory"
          binDirectory = "C:\\path\to\game\bin\directory"
+         channel = "windows"
       }
+      //OS X-specific builds.
+      //butlerInstallDirectory can be specified for anyOS builds performed on OS X 
       osx {
          butlerInstallDirectory = "/path/to/butler/directory"
          binDirectory = "/path/to/game/bin/directory"
+         channel = "osx"
       }
+      //Linux-specific builds.
+      //butlerInstallDirectory can be specified for anyOS builds performed on Linux
       linux {
          butlerInstallDirectory = "/path/to/butler/directory"
          binDirectory = "/path/to/game/bin/directory"
+         channel = "linux"
+      }
+      //Cross-platform builds, e.g. HTML5 games
+      anyOs {
+      	 binDirectory = "C:\\path\to\game\bin\directory"
+         channel = "release"
       }
    }
 }

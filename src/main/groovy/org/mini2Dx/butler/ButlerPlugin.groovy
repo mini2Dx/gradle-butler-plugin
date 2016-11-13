@@ -25,6 +25,7 @@ package org.mini2Dx.butler
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.mini2Dx.butler.domain.AnyOs
 import org.mini2Dx.butler.domain.Linux
 import org.mini2Dx.butler.domain.OSX
 import org.mini2Dx.butler.domain.Windows
@@ -45,6 +46,7 @@ class ButlerPlugin implements Plugin<Project> {
 		project.plugins.apply DownloadTaskPlugin
 		project.extensions.create("butler", ButlerExtension)
 		
+		project.butler.extensions.create("anyOs", AnyOs)
 		project.butler.extensions.create("windows", Windows)
 		project.butler.extensions.create("osx", OSX)
 		project.butler.extensions.create("linux", Linux)

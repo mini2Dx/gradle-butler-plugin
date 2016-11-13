@@ -1,3 +1,8 @@
+[1.1.0]
+- Channels can now be specified for each OS
+- Added 'AnyOs' option for builds that can be built and run on any OS, e.g. HTML5 games
+- Fixed butler binary not being set as executable on some OSs
+
 [1.0.1]
 - Fixed gradle extension exception
 - Plugin now available in Maven Central

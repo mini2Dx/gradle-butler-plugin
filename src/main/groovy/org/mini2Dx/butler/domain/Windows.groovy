@@ -35,4 +35,8 @@ class Windows {
 	 * Set if you want to override the automatic Butler install directory
 	 */
 	String butlerInstallDirectory;
+	/**
+	 * Set if you want to override the channel. Defaults to 'windows'
+	 */
+	String channel = 'windows';
 }

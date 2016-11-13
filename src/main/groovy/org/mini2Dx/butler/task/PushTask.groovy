@@ -40,23 +40,55 @@ class PushTask extends DefaultTask  {
 
 	@TaskAction
 	def pushToItch() {
+		boolean anyOsBuildPushed = pushAnyOsBuild();
+		boolean platformSpecificBuildPushed = pushPlatformSpecificBuild();
+		
+		if(!anyOsBuildPushed && !platformSpecificBuildPushed) {
+			throw new Exception("No build was configured to be pushed")
+		}
+	}
+	
+	def pushAnyOsBuild() {
+		if(project.getExtensions().findByName('butler').anyOs == null) {
+			return false;
+		}
+		def osBinDir = project.getExtensions().findByName('butler').windows.binDirectory
+		String channel = project.getExtensions().findByName('butler').windows.channel
+		pushBuild(osBinDir, channel)
+		return true;
+	}
+	
+	def pushPlatformSpecificBuild() {
 		def osBinDir = null;
 		String channel;
 
 		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+			if(project.getExtensions().findByName('butler').windows == null) {
+				return false;
+			}
 			osBinDir = project.getExtensions().findByName('butler').windows.binDirectory
-			channel = "windows"
+			channel = project.getExtensions().findByName('butler').windows.channel
 		} else if (Os.isFamily(Os.FAMILY_MAC)) {
+			if(project.getExtensions().findByName('butler').osx == null) {
+				return false;
+			}
 			osBinDir = project.getExtensions().findByName('butler').osx.binDirectory
-			channel = "osx"
+			channel = project.getExtensions().findByName('butler').osx.channel
 		} else {
+			if(project.getExtensions().findByName('butler').linux == null) {
+				return false;
+			}
 			osBinDir = project.getExtensions().findByName('butler').linux.binDirectory
-			channel = "linux"
+			channel = project.getExtensions().findByName('butler').linux.channel
 		}
+		pushBuild(osBinDir, channel)
+		return true;
+	}
+	
+	def pushBuild(String osBinDir, String channel) {
 		if(osBinDir == null) {
-			throw new Exception("No steward binary directory set for " + channel)
+			throw new Exception("No butler binary directory set for " + channel)
 		}
-		
 		if(project.getExtensions().findByName('butler').alphaChannel) {
 			channel += "-alpha"
 		} else if(project.getExtensions().findByName('butler').betaChannel) {
@@ -69,20 +101,20 @@ class PushTask extends DefaultTask  {
 		}
 		String user = project.getExtensions().findByName('butler').user
 		if(user == null) {
-			throw new Exception("user not set in steward configuration")
+			throw new Exception("'user' not set in butler configuration")
 		}
 		String game = project.getExtensions().findByName('butler').game
 		if(game == null) {
-			throw new Exception("game not set in steward configuration")
+			throw new Exception("'game' not set in butler configuration")
 		}
 		String deployDetails = user + "/" + game + ":" + channel;
 
 		if(project.getExtensions().findByName('butler').userVersion != null) {
 			println "Deploying to itch.io [" + deployDetails + "] with version " + project.getExtensions().findByName('butler').userVersion
-			ButlerUtils.execButler(project, binDirectory.getAbsolutePath(), deployDetails, "--userversion", project.getExtensions().findByName('butler').userVersion);
+			ButlerUtils.execButler(project, "push", binDirectory.getAbsolutePath(), deployDetails, "--userversion", project.getExtensions().findByName('butler').userVersion);
 		} else {
 			println "Deploying to itch.io [" + deployDetails + "]"
-			ButlerUtils.execButler(project, binDirectory.getAbsolutePath(), deployDetails);
+			ButlerUtils.execButler(project, "push", binDirectory.getAbsolutePath(), deployDetails);
 		}
 	}
 }
