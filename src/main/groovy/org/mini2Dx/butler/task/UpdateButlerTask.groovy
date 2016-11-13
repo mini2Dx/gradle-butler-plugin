@@ -72,13 +72,29 @@ class UpdateButlerTask extends DefaultTask {
 		downloadAction.dest(installDirectory)
 		downloadAction.execute()
 		
+		ensureButlerIsExecutable(installDirectory)
+		
 		ButlerUtils.execButler(project, "-V");
 	}
 	
 	def update(File binaryFile) {
+		ensureButlerIsExecutable(installDirectory)
+		
 		if(project.getExtensions().findByName('butler').updateButler) {
 			ButlerUtils.execButler(project, "upgrade");
 		}
 		ButlerUtils.execButler(project, "-V");
+	}
+	
+	def ensureButlerIsExecutable(File installDirectory) {
+		File file = new File(installDirectory, "butler")
+		if (!file.isFile()) {
+			throw new Exception("Can't access butler file")
+		}
+		try {
+			file.setExecutable(true)
+		} catch (Exception e) {
+			//File system does not support executable bit
+		}
 	}
 }
