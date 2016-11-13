@@ -57,7 +57,7 @@ artifacts {
 dependencies {
 	compile gradleApi()
 	compile localGroovy()
-	compile 'de.undercouch:gradle-download-task:3.0.0'
+	compile 'de.undercouch:gradle-download-task:3.1.2'
 
 	testCompile 'junit:junit:4.11'
 	testCompile gradleTestKit()
