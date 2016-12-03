@@ -1,3 +1,6 @@
+[1.1.1]
+- Ensure butler is executable before updating (thanks Sythelux)
+
 [1.1.0]
 - Channels can now be specified for each OS
 - Added 'AnyOs' option for builds that can be built and run on any OS, e.g. HTML5 games

@@ -144,4 +144,4 @@ The code is released under the [MIT License](https://github.com/mini2Dx/gradle-b
 Pull requests are welcome :) Any issues found please add them to the [Issue Tracker](https://github.com/mini2Dx/gradle-butler-plugin/issues).
 
 Gradle wrapper is included in the code. The following tools were used for development:
-* Gradle 2.13
+* Gradle 3.0
