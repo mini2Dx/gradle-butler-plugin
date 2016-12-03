@@ -69,11 +69,11 @@ class ButlerUtils {
 	 */
 	public static File getButlerBinary(Project project) {
 		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-			return new File(getInstallDirectory(project), "butler.exe");
+			return new File(getInstallDirectory(project), "butler.exe")
 		} else if (Os.isFamily(Os.FAMILY_MAC)) {
-			return new File(getInstallDirectory(project), "butler");
+			return new File(getInstallDirectory(project), "butler")
 		} else {
-			return new File(getInstallDirectory(project), "butler");
+			return new File(getInstallDirectory(project), "butler")
 		}
 	}
 	
@@ -98,6 +98,7 @@ class ButlerUtils {
 	 */
 	public static void execButler(Project project, String... args) {
 		String [] processArgs = new String [args.length + 1]
+		ensureButlerIsExecutable(getButlerBinary(project))
 		processArgs[0] = getButlerBinary(project).getAbsolutePath()
 		for(int i = 0; i < args.length; i++) {
 			processArgs[i + 1] = args[i];
@@ -107,4 +108,16 @@ class ButlerUtils {
 			commandLine processArgs
 		}
 	}
+
+	static def ensureButlerIsExecutable(File binary) {
+		if (!binary.isFile()) {
+			throw new Exception("Can't access butler file")
+		}
+		try {
+			binary.setExecutable(true)
+		} catch (Exception ignored) {
+			//File system does not support executable bit
+		}
+	}
+
 }
