@@ -49,11 +49,11 @@ class PushTask extends DefaultTask  {
 	}
 	
 	def pushAnyOsBuild() {
-		if(project.getExtensions().findByName('butler').anyOs == null) {
+		if(project.getExtensions().findByName('butler').anyOs.binDirectory == null) {
 			return false;
 		}
-		def osBinDir = project.getExtensions().findByName('butler').windows.binDirectory
-		String channel = project.getExtensions().findByName('butler').windows.channel
+		def osBinDir = project.getExtensions().findByName('butler').anyOs.binDirectory
+		String channel = project.getExtensions().findByName('butler').anyOs.channel
 		pushBuild(osBinDir, channel)
 		return true;
 	}
