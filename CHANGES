@@ -1,3 +1,6 @@
+[1.1.2]
+- Fix bug where it always pushes anyOs (thanks gitgilly)
+
 [1.1.1]
 - Ensure butler is executable before updating (thanks Sythelux)
 
