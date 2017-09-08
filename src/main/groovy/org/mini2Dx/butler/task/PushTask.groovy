@@ -49,7 +49,7 @@ class PushTask extends DefaultTask  {
 	}
 	
 	def pushAnyOsBuild() {
-		if(project.getExtensions().findByName('butler').anyOs.binDirectory == null) {
+		if(project.getExtensions().findByName('butler').anyOs?.binDirectory == null) {
 			return false;
 		}
 		def osBinDir = project.getExtensions().findByName('butler').anyOs.binDirectory
@@ -63,19 +63,19 @@ class PushTask extends DefaultTask  {
 		String channel;
 
 		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-			if(project.getExtensions().findByName('butler').windows == null) {
+			if(project.getExtensions().findByName('butler').windows?.binDirectory == null) {
 				return false;
 			}
 			osBinDir = project.getExtensions().findByName('butler').windows.binDirectory
 			channel = project.getExtensions().findByName('butler').windows.channel
 		} else if (Os.isFamily(Os.FAMILY_MAC)) {
-			if(project.getExtensions().findByName('butler').osx == null) {
+			if(project.getExtensions().findByName('butler').osx?.binDirectory == null) {
 				return false;
 			}
 			osBinDir = project.getExtensions().findByName('butler').osx.binDirectory
 			channel = project.getExtensions().findByName('butler').osx.channel
 		} else {
-			if(project.getExtensions().findByName('butler').linux == null) {
+			if(project.getExtensions().findByName('butler').linux?.binDirectory == null) {
 				return false;
 			}
 			osBinDir = project.getExtensions().findByName('butler').linux.binDirectory
