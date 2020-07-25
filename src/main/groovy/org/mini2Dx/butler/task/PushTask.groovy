@@ -23,16 +23,23 @@
  */
 package org.mini2Dx.butler.task
 
-import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.mini2Dx.butler.ButlerUtils
 import org.mini2Dx.butler.exception.NoBuildException
 
 /**
- * Calls 'butler push'. Will push the game binary corresponding to the OS the task runs on.
+ * Calls 'butler push'. Will push the specified game binary to the specified channel.
  */
 class PushTask extends DefaultTask  {
+
+	@Input
+	public String binDirectory
+
+	@Input
+	public String channel
+
 	PushTask() {
 		super()
 		dependsOn("butlerUpdate")
@@ -40,62 +47,14 @@ class PushTask extends DefaultTask  {
 
 	@TaskAction
 	def pushToItch() {
-		boolean anyOsBuildPushed = pushAnyOsBuild();
-		boolean platformSpecificBuildPushed = pushPlatformSpecificBuild();
-		
-		if(!anyOsBuildPushed && !platformSpecificBuildPushed) {
-			throw new Exception("No build was configured to be pushed")
-		}
-	}
-	
-	def pushAnyOsBuild() {
-		if(project.getExtensions().findByName('butler').anyOs?.binDirectory == null) {
-			return false;
-		}
-		def osBinDir = project.getExtensions().findByName('butler').anyOs.binDirectory
-		String channel = project.getExtensions().findByName('butler').anyOs.channel
-		pushBuild(osBinDir, channel)
-		return true;
-	}
-	
-	def pushPlatformSpecificBuild() {
-		def osBinDir = null;
-		String channel;
+        if(channel == null) {
+            throw new Exception("'channel' not set in butler push task")
+        }
+        if(binDirectory == null) {
+            throw new Exception("'binDirectory' not set in butler push task")
+        }
 
-		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-			if(project.getExtensions().findByName('butler').windows?.binDirectory == null) {
-				return false;
-			}
-			osBinDir = project.getExtensions().findByName('butler').windows.binDirectory
-			channel = project.getExtensions().findByName('butler').windows.channel
-		} else if (Os.isFamily(Os.FAMILY_MAC)) {
-			if(project.getExtensions().findByName('butler').osx?.binDirectory == null) {
-				return false;
-			}
-			osBinDir = project.getExtensions().findByName('butler').osx.binDirectory
-			channel = project.getExtensions().findByName('butler').osx.channel
-		} else {
-			if(project.getExtensions().findByName('butler').linux?.binDirectory == null) {
-				return false;
-			}
-			osBinDir = project.getExtensions().findByName('butler').linux.binDirectory
-			channel = project.getExtensions().findByName('butler').linux.channel
-		}
-		pushBuild(osBinDir, channel)
-		return true;
-	}
-	
-	def pushBuild(String osBinDir, String channel) {
-		if(osBinDir == null) {
-			throw new Exception("No butler binary directory set for " + channel)
-		}
-		if(project.getExtensions().findByName('butler').alphaChannel) {
-			channel += "-alpha"
-		} else if(project.getExtensions().findByName('butler').betaChannel) {
-			channel += "-beta"
-		}
-
-		File binDirectory = new File(osBinDir)
+        File binDirectory = new File(binDirectory)
 		if(!binDirectory.exists()) {
 			throw new NoBuildException()
 		}
@@ -107,7 +66,12 @@ class PushTask extends DefaultTask  {
 		if(game == null) {
 			throw new Exception("'game' not set in butler configuration")
 		}
-		String deployDetails = user + "/" + game + ":" + channel;
+
+		String finalChannel = channel
+		if(project.getExtensions().findByName('butler').allChannelsPostfix) {
+			finalChannel += project.getExtensions().findByName('butler').allChannelsPostfix
+		}
+		String deployDetails = user + "/" + game + ":" + finalChannel
 
 		if(project.getExtensions().findByName('butler').userVersion != null) {
 			println "Deploying to itch.io [" + deployDetails + "] with version " + project.getExtensions().findByName('butler').userVersion
