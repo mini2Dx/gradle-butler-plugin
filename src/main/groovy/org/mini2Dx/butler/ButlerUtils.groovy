@@ -37,15 +37,7 @@ class ButlerUtils {
 	 * @return A {@link File} for the install directory
 	 */
 	public static File getInstallDirectory(Project project) {
-		String installPath = ""
-		
-		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-			installPath = project.getExtensions().findByName('butler').windows.butlerInstallDirectory
-		} else if (Os.isFamily(Os.FAMILY_MAC)) {
-			installPath = project.getExtensions().findByName('butler').osx.butlerInstallDirectory
-		} else {
-			installPath = project.getExtensions().findByName('butler').linux.butlerInstallDirectory
-		}
+		String installPath = project.getExtensions().findByName('butler').butlerInstallDirectory
 		
 		File installDirectory;
 		if(installPath == null) {

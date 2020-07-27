@@ -40,17 +40,17 @@ class ButlerExtension {
 	 */
 	boolean updateButler = true;
 	/**
-	 * When true appends -alpha to the channel name
+	 * Set this to append something to every channel name
 	 */
-	boolean alphaChannel = false;
-	/**
-	 * When true appends -beta to channel name
-	 */
-	boolean betaChannel = false;
+	String allChannelsPostfix = ""
 	/**
 	 * Set if you want to override itch.io's version number
 	 */
 	String userVersion;
+	/**
+	 * Set if you want to override the automatic Butler install directory
+	 */
+	String butlerInstallDirectory;
 	
 	String windows32Download = "https://dl.itch.ovh/butler/windows-386/head/butler.exe"
 	String windows64Download = "https://dl.itch.ovh/butler/windows-amd64/head/butler.exe"

@@ -6,7 +6,7 @@ A gradle plugin for automatically installing, updating and running the [itch.io 
 
 ## How to use
 
-Add the following buildscript configuration to the top of your build.gradle
+Add the following buildscript configuration to the top of your `build.gradle`
 
 ```gradle
 buildscript {
@@ -26,44 +26,46 @@ Then add the plugin configuration to your project.
 ```gradle
 project(":projectName") {
    apply plugin: "org.mini2Dx.butler"
-   
+
    ........
 
    butler {
       user = "your-itchio-user"
       game = "your-itchio-game"
-   
-      windows {
-         binDirectory = "C:\\path\to\game\bin\directory"
-      }
-      osx {
-         binDirectory = "/path/to/game/bin/directory"
-      }
-      linux {
-         binDirectory = "/path/to/game/bin/directory"
-      }
-      //Use this if your build will work on any OS, e.g. HTML5 games
-      anyOs {
-      	 binDirectory = "C:\\path\to\game\bin\directory"
-      }
    }
+}
+```
+
+Then configure tasks with the channels you want to push:
+
+```gradle
+project(":projectName") {
+
+    ........
+
+    task butlerPush(type: org.mini2Dx.butler.task.PushTask) {
+        binDirectory = "/path/to/game/bin/directory"
+        channel = "example"
+    }
 }
 ```
 
 The plugin will add the following tasks to your project.
 
 | Task  | Description |
-| ------------- | ------------- | 
+| ------------- | ------------- |
 | butlerUpdate  | Updates butler to latest stable version or installs it if it is not present. All other tasks depend on this task so you do not need to call it explicitly. |
 | butlerLogin  | Calls ```butler login``` |
 | butlerLogout  | Calls ```butler logout``` |
-| butlerPush  | [Pushes builds](https://docs.itch.ovh/butler/master/pushing.html) using butler |
 
-The butlerPush task supports pushing platform-specific and cross-platform builds simultaneously.
+As well as providing a task template with `org.mini2Dx.butler.task.PushTask` which can be used to create tasks which [push builds](https://docs.itch.ovh/butler/master/pushing.html) using butler.
 
-For platform-specific builds, the [channel](https://docs.itch.ovh/butler/master/pushing.html#channel-names) is chosen based on the current OS. This can be overridden in the platform configuration. However, to push a release of your game for a platform you must run the task on that platform, i.e. You must be on Mac OS X to push a Mac game release.
+You can configure multiple push tasks, only the binDirectory and channel have to be provided for each.
 
-For cross-platform builds (e.g. HTML5 games), the ```anyOs``` configuration can be used to specify the channel.
+| Push Task Property  | Description |
+| ------------- | ------------- |
+| binDirectory  | (**required**) The directory containing your game's build, which will be pushed by butler |
+| channel  | (**required**) The [channel](https://docs.itch.ovh/butler/master/pushing.html#channel-names) to release your build to |
 
 ## Advanced Configuration
 
@@ -74,68 +76,115 @@ There are several optional configuration parameters available.
 | user  | String | _blank_ | (**required**) Your itch.io username |
 | game  | String | _blank_ | (**required**) The itch.io game id |
 | updateButler  | boolean | true | Set to false to disable butler updates |
-| alphaChannel  | boolean | false | When true appends -alpha to the channel name |
-| betaChannel  | boolean | false |  When true appends -beta to channel name |
 | userVersion  | String | null | Set this if you want to override itch.io's version number |
-| windows.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on Windows |
-| windows.binDirectory  | String | _blank_ | (**required**) The directory of your game's Windows build |
-| windows.channel  | String | "windows" | The channel to release the Windows build to |
-| osx.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on OS X |
-| osx.binDirectory  | String | _blank_ | (**required**) The directory of your game's OS X build |
-| osx.channel  | String | "osx" | The channel to release the OS X build to |
-| linux.butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory on Linux |
-| linux.binDirectory  | String | _blank_ | (**required**) The directory of your game's Linux build |
-| linux.channel  | String | "linux" | The channel to release the Linux build to |
-| anyOs.binDirectory  | String | _blank_ | (**required**) The directory of your game's Linux build |
-| anyOs.channel  | String | "release" | The channel to release your cross-platform build to |
+| allChannelsPostfix  | String | null | Set this to append the given string to every channel name |
+| butlerInstallDirectory  | String | null | Set if you want to override the automatic Butler install directory |
 
 The following example shows all options in use.
 
 ```gradle
 project(":projectName") {
    apply plugin: "org.mini2Dx.butler"
-   
+
    ........
 
    butler {
       user = "your-itchio-user"
       game = "your-itchio-game"
       updateButler = true
-      alphaChannel = false
-      betaChannel = false
+      allChannelsPostfix = "-beta"
       userVersion = project.version
-
-      //Windows-specific builds  
-      //butlerInstallDirectory can be specified for anyOS builds performed on Windows 
-      windows {
-      	 butlerInstallDirectory = "C:\\path\to\butler\directory"
-         binDirectory = "C:\\path\to\game\bin\directory"
-         channel = "windows"
-      }
-      //OS X-specific builds.
-      //butlerInstallDirectory can be specified for anyOS builds performed on OS X 
-      osx {
-         butlerInstallDirectory = "/path/to/butler/directory"
-         binDirectory = "/path/to/game/bin/directory"
-         channel = "osx"
-      }
-      //Linux-specific builds.
-      //butlerInstallDirectory can be specified for anyOS builds performed on Linux
-      linux {
-         butlerInstallDirectory = "/path/to/butler/directory"
-         binDirectory = "/path/to/game/bin/directory"
-         channel = "linux"
-      }
-      //Cross-platform builds, e.g. HTML5 games
-      anyOs {
-      	 binDirectory = "C:\\path\to\game\bin\directory"
-         channel = "release"
-      }
+      butlerInstallDirectory = "C:\\path\to\butler\directory"
    }
 }
 ```
 
-## License
+## Depending on your project build task
+You will most likely want your `pushTask` to depend on the gradle task that builds your game binaries. This will ensure the project is automatically build when calling the task.
+This example uses the `build` task, but it might be different for your project configuration.
+
+```gradle
+task butlerPush(type: org.mini2Dx.butler.task.PushTask) {
+    dependsOn build
+    binDirectory = "C:\\path\to\game\bin\directory"
+    channel = "windows"
+}
+```
+
+## Upgrading from version 1.1.3 or earlier
+
+If you've used the plugin before and are upgrading from 1.1.3 or an earlier version, these steps will help you port your gradle code:
+
+**1. convert any pre-defined channels (windows/osx/linux/anyOs) you used into tasks**
+  * the binDirectory stays the same
+  * the channel name now always needs to be specified explicitly
+  * butlerInstallDirectory is now a property of the "butler" config directly
+
+As an example:
+```gradle
+butler {
+    ...
+    windows {
+        butlerInstallDirectory = "C:\\path\to\butler\directory"
+        binDirectory = "C:\\path\to\game\bin\directory"
+    }
+}
+```
+This would need to be changed to the following (note `butlerPushWindows` is an arbitrary name, you can call your task however you like):
+```gradle
+butler {
+    ...
+    butlerInstallDirectory = "C:\\path\to\butler\directory"
+}
+
+task butlerPushWindows(type: org.mini2Dx.butler.task.PushTask) {
+    binDirectory = "C:\\path\to\game\bin\directory"
+    channel = "windows"
+}
+```
+
+**2. If you want to have just a single task to push multiple channels, you can have a task that depends on the other tasks.**
+
+E.g.
+```gradle
+task butlerPush() {
+    depensOn butlerPushWindows, butlerPushOsx, butlerPushLinux, butlerPushAnyOs
+}
+```
+
+Given those tasks exist, the gradle task "butlerPush" will execute them all.
+
+**3. If you've previously made use of the "alphaChannel" or "betaChannel" property, you can now set the "allChannelsPostfix" property to "-alpha" or "-beta" to achieve the same effect.**
+```gradle
+butler {
+    ...
+    allChannelsPostfix = "-alpha"
+}
+```
+
+**4. If you need to configure a different `butlerInstallDirectory` on different machines, you can use a separate script file that you can keep outside of version control.**
+E.g. like so:
+
+**localproperties.gradle**
+```gradle
+ext {
+    BUTLER_INSTALL_DIR = '/path/to/butler'
+}
+```
+
+**build.gradle**
+```gradle
+apply from: 'localproperties.gradle'
+
+...
+
+butler {
+    ...
+    butlerInstallDir = BUTLER_INSTALL_DIR
+}
+```
+
+## License
 
 The code is released under the [MIT License](https://github.com/mini2Dx/gradle-butler-plugin/blob/master/LICENSE).
 

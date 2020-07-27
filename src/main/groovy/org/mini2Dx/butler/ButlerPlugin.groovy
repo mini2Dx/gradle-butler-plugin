@@ -25,13 +25,8 @@ package org.mini2Dx.butler
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.mini2Dx.butler.domain.AnyOs
-import org.mini2Dx.butler.domain.Linux
-import org.mini2Dx.butler.domain.OSX
-import org.mini2Dx.butler.domain.Windows
 import org.mini2Dx.butler.task.LoginTask
 import org.mini2Dx.butler.task.LogoutTask
-import org.mini2Dx.butler.task.PushTask
 import org.mini2Dx.butler.task.UpdateButlerTask
 
 import de.undercouch.gradle.tasks.download.DownloadTaskPlugin
@@ -46,15 +41,9 @@ class ButlerPlugin implements Plugin<Project> {
 		project.plugins.apply DownloadTaskPlugin
 		project.extensions.create("butler", ButlerExtension)
 		
-		project.butler.extensions.create("anyOs", AnyOs)
-		project.butler.extensions.create("windows", Windows)
-		project.butler.extensions.create("osx", OSX)
-		project.butler.extensions.create("linux", Linux)
-		
 		project.task('butlerUpdate', type: UpdateButlerTask)
 		project.task('butlerLogin', type: LoginTask)
 		project.task('butlerLogout', type: LogoutTask)
-		project.task('butlerPush', type: PushTask)
 	}
 
 }
