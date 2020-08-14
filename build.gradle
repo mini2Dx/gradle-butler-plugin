@@ -109,7 +109,3 @@ if(project.hasProperty('ossrhUser')) {
 		}
 	}
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
-}

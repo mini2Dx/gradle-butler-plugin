@@ -148,7 +148,7 @@ task butlerPushWindows(type: org.mini2Dx.butler.task.PushTask) {
 E.g.
 ```gradle
 task butlerPush() {
-    depensOn butlerPushWindows, butlerPushOsx, butlerPushLinux, butlerPushAnyOs
+    dependsOn butlerPushWindows, butlerPushOsx, butlerPushLinux, butlerPushAnyOs
 }
 ```
 
@@ -193,4 +193,4 @@ The code is released under the [MIT License](https://github.com/mini2Dx/gradle-b
 Pull requests are welcome :) Any issues found please add them to the [Issue Tracker](https://github.com/mini2Dx/gradle-butler-plugin/issues).
 
 Gradle wrapper is included in the code. The following tools were used for development:
-* Gradle 3.0
+* Gradle 5.6.4
