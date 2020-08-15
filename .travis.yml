@@ -1,7 +1,0 @@
-language: java
-os:
-  - linux
-notifications:
-  email:
-    on_success: change
-    on_failure: always
