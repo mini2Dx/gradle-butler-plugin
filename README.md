@@ -110,6 +110,25 @@ task butlerPush(type: org.mini2Dx.butler.task.PushTask) {
     channel = "windows"
 }
 ```
+## Using the butler plugin in a separate gradle script
+
+If your project uses multiple gradle script files (e.g. LibGDX) then you will be required to add the following block of code in multiple places:
+
+
+```gradle
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.mini2Dx', name: 'butler', version: '2.0.0'
+    }
+}
+```
+
+First it should be added to the highest level build.gradle file as described above. But it must also be added at the beginning of any other gradle scripts in which you want to declare `org.mini2Dx.butler.task.PushTask`'s in order for gradle to recognize the class name. 
 
 ## Upgrading from version 1.1.3 or earlier
 
