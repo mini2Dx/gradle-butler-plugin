@@ -25,6 +25,7 @@ package org.mini2Dx.butler.task
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.mini2Dx.butler.ButlerUtils
 import org.mini2Dx.butler.exception.NoBuildException
@@ -34,8 +35,8 @@ import org.mini2Dx.butler.exception.NoBuildException
  */
 class PushTask extends DefaultTask  {
 
-	@Input
-	public String binDirectory
+	@InputDirectory
+	public File binDirectory
 
 	@Input
 	public String channel
@@ -53,8 +54,6 @@ class PushTask extends DefaultTask  {
         if(binDirectory == null) {
             throw new Exception("'binDirectory' not set in butler push task")
         }
-
-        File binDirectory = new File(binDirectory)
 		if(!binDirectory.exists()) {
 			throw new NoBuildException()
 		}
@@ -80,5 +79,21 @@ class PushTask extends DefaultTask  {
 			println "Deploying to itch.io [" + deployDetails + "]"
 			ButlerUtils.execButler(project, "push", binDirectory.getAbsolutePath(), deployDetails);
 		}
+	}
+
+	File getBinDirectory() {
+		return binDirectory
+	}
+
+	void setBinDirectory(File binDirectory) {
+		this.binDirectory = binDirectory
+	}
+
+	String getChannel() {
+		return channel
+	}
+
+	void setChannel(String channel) {
+		this.channel = channel
 	}
 }
