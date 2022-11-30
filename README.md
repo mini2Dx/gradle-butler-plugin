@@ -16,7 +16,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'org.mini2Dx', name: 'butler', version: '2.0.0'
+        classpath group: 'org.mini2Dx', name: 'butler', version: '2.1.0'
     }
 }
 ```
@@ -123,7 +123,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'org.mini2Dx', name: 'butler', version: '2.0.0'
+        classpath group: 'org.mini2Dx', name: 'butler', version: '2.1.0'
     }
 }
 ```
